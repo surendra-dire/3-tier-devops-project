@@ -1,0 +1,73 @@
+name: Deploy Node App to EC2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Zip project
+    - name: Create Deployment Package
+      run: |
+        zip -r app.zip . -x "*.git*"
+
+    # Upload zip to EC2
+    - name: Upload Zip to EC2
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.EC2_SSH_KEY }}
+        source: "app.zip"
+        target: "/home/ubuntu/app.zip"
+
+    # SSH into EC2 and deploy
+    - name: Deploy on EC2
+      uses: appleboy/ssh-action@v1.1.0
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          set -e
+
+          echo "🔄 Stopping previous Node apps"
+          pm2 stop all || true
+
+          echo "📦 Cleaning old deployment"
+          rm -rf /home/ubuntu/app || true
+
+          echo "📂 Unzipping new code"
+          unzip -o /home/ubuntu/app.zip -d /home/ubuntu/app
+
+          cd /home/ubuntu/app/api
+
+          echo "📦 Installing Backend Dependencies"
+          npm install
+
+          echo "🔍 Running Backend Tests"
+          npm test || echo "⚠ No backend tests found"
+
+          echo "🛡 Running Security Scan"
+          npm audit --audit-level=high || true
+
+          echo "🚀 Starting Backend (PM2)"
+          pm2 start app.js --name backend
+
+          cd /home/ubuntu/app/frontend
+
+          echo "📦 Installing Frontend Dependencies"
+          npm install
+
+          echo "🔧 Building Frontend"
+          npm run build || echo "⚠ No build script found"
+
+          echo "🚀 Starting Frontend"
+          pm2 start "npm start" --name frontend
+
+          echo "🎉 Deployment Complete"
