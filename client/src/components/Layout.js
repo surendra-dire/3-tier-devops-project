@@ -19,9 +19,9 @@ function Layout({ children }) {
         <aside className="sidebar slide-in-left">
           <h3>Connect</h3>
           <ul className="social-links">
-            <li><a className="sidebar-btn" href="https://www.linkedin.com/in/surendradire/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-            <li><a className="sidebar-btn" href="https://www.linkedin.com/in/surendradire/" target="_blank" rel="noopener noreferrer">YouTube</a></li>
-            <li><a className="sidebar-btn" href="https://www.linkedin.com/in/surendradire/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+            <li><a className="sidebar-btn" href="https://github.com/surendra-dire" target="_blank" rel="noopener noreferrer">Github</a></li>
+            <li><a className="sidebar-btn" href="https://github.com/surendra-dire" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+
           </ul>
         </aside>
         <main className="main-content fade-in">
