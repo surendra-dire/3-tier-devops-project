@@ -57,7 +57,7 @@ jobs:
           npm audit --audit-level=high || true
 
           echo "🚀 Starting Backend (PM2)"
-          pm2 start app.js --name backend
+          npm start
 
           cd /home/ubuntu/app/frontend
 
@@ -68,6 +68,6 @@ jobs:
           npm run build || echo "⚠ No build script found"
 
           echo "🚀 Starting Frontend"
-          pm2 start "npm start" --name frontend
+          npm start
 
           echo "🎉 Deployment Complete"
