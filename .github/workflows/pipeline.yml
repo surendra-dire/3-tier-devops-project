@@ -36,8 +36,8 @@ jobs:
         script: |
           set -e
 
-          echo "🔄 Stopping previous Node apps"
-          pm2 stop all || true
+          # echo "🔄 Stopping previous Node apps"
+          # pm2 stop all || true
 
           echo "📦 Cleaning old deployment"
           rm -rf /home/ubuntu/app || true
