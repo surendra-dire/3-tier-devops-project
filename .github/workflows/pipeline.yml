@@ -43,29 +43,30 @@ jobs:
           echo "📂 Unzipping new code"
           unzip -o /home/ubuntu/app.zip -d /home/ubuntu/app
 
+          echo "📦 Backend Setup"
           cd /home/ubuntu/app/api
-
-          echo "📦 Installing Backend Dependencies"
           npm install
 
           echo "🔍 Running Backend Tests"
           npm test || echo "⚠ No backend tests found"
 
-          echo "🛡 Running Security Scan"
+          echo "🛡 Security Scan"
           npm audit --audit-level=high || true
 
-          echo "🚀 Starting Backend (PM2)"
-          npm start
+          echo "🚀 Starting Backend with PM2"
+          pm2 restart backend || pm2 start app.js --name backend
 
-          cd /home/ubuntu/app/frontend
-
-          echo "📦 Installing Frontend Dependencies"
+          echo "📦 Frontend Setup"
+          cd /home/ubuntu/app/client
           npm install
 
           echo "🔧 Building Frontend"
           npm run build || echo "⚠ No build script found"
 
-          echo "🚀 Starting Frontend"
-          npm start
+          echo "🚀 Starting Frontend with PM2"
+          pm2 restart frontend || pm2 start "npm start" --name frontend
+
+          echo "💾 Saving PM2 Processes"
+          pm2 save
 
           echo "🎉 Deployment Complete"
