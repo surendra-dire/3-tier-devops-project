@@ -25,6 +25,7 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         source: "app.zip"
         target: "/home/ubuntu"
+        overwrite: true
 
     # SSH into EC2 and deploy
     - name: Deploy on EC2
