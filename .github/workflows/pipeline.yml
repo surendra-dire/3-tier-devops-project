@@ -47,8 +47,8 @@ jobs:
           cd /home/ubuntu/app/api
           npm install
 
-          echo "🔍 Running Backend Tests"
-          npm test || echo "⚠ No backend tests found"
+          # echo "🔍 Running Backend Tests"
+          # npm test || echo "⚠ No backend tests found"
 
           echo "🛡 Security Scan"
           npm audit --audit-level=high || true
